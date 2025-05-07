@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@types/express": "^5.0.1",
-    "express": "^5.1.0",
-    "db":"*"
+    "cors": "^2.8.5",
+    "db": "*",
+    "express": "^5.1.0"
   }
 }

@@ -3,6 +3,7 @@ export function authMiddleware(req: Request, res:Response, next:NextFunction) {
  const authHeader = req.headers['authorization'];
  req.userId = "1";
 next();
+
 }
 
 // import { clerkMiddleware } from '@clerk/nextjs/server';

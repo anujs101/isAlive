@@ -1,9 +1,11 @@
 import express, { response } from "express";
 import { authMiddleware } from "./middleware";
 import { prismaClient } from "db/client";
+const cors = require('cors');
 const app = express();
 const PORT = 8080;
 app.use(express.json());
+app.use(cors());
 //add a website
 app.post("/api/v1/website",authMiddleware, async (req, res) => {
  const userId = req.userId!;
