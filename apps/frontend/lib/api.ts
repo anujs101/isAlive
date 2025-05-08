@@ -30,9 +30,9 @@ export const addWebsite = async (url: string, token? : string): Promise<Website>
 /**
  * Delete a website from monitoring
  */
-export const deleteWebsite = async (websiteId: string): Promise<void> => {
-  const { getToken } = useAuth();
-  const token = await getToken();
+export const deleteWebsite = async (websiteId: string, token:string|null): Promise<void> => {
+  //const { getToken } = useAuth();
+  //const token = await getToken();
   
   const response = await fetch(`${API_BASE_URL}/website`, {
     method: 'DELETE',

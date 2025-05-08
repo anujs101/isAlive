@@ -12,6 +12,7 @@ import {
   formatUrl
 } from '@/lib/utils';
 import { deleteWebsite } from '@/lib/api';
+import { useAuth } from '@clerk/nextjs';
 
 interface WebsiteCardProps {
   website: Website;
@@ -20,6 +21,7 @@ interface WebsiteCardProps {
 
 export const WebsiteCard: React.FC<WebsiteCardProps> = ({ website, onDelete }) => {
   const [isDeleting, setIsDeleting] = React.useState(false);
+  const auth = useAuth(); // Move the hook here, at the top level
   
   const uptimePercentage = calculateUptimePercentage(website.ticks);
   const latestLatency = getLatestLatency(website.ticks);
@@ -29,10 +31,11 @@ export const WebsiteCard: React.FC<WebsiteCardProps> = ({ website, onDelete }) =
   
   const handleDelete = async () => {
     if (isDeleting) return;
-    
+
     try {
+      const token = await auth.getToken(); // Use the auth object from above
       setIsDeleting(true);
-      await deleteWebsite(website.id);
+      await deleteWebsite(website.id, token);
       onDelete(website.id);
     } catch (error) {
       console.error('Failed to delete website:', error);
