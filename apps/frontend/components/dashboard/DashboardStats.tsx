@@ -20,12 +20,18 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ websites }) => {
       };
     }
 
-    const uptimes = websites.map(site => calculateUptimePercentage(site.ticks));
-    const latencies = websites.map(site => getLatestLatency(site.ticks));
-    const totalChecks = websites.reduce((acc, site) => acc + site.ticks.length, 0);
+  // Filter out websites with undefined ticks before mapping
+  const websitesWithTicks = websites.filter(site => site.ticks && Array.isArray(site.ticks));
+  
+  const uptimes = websitesWithTicks.map(site => calculateUptimePercentage(site.ticks));
+  const latencies = websitesWithTicks.map(site => getLatestLatency(site.ticks));
+  const totalChecks = websitesWithTicks.reduce((acc, site) => acc + (Array.isArray(site.ticks) ? site.ticks.length : 0), 0);
 
-    const averageUptime = uptimes.reduce((acc, val) => acc + val, 0) / uptimes.length;
-    const averageLatency = latencies.reduce((acc, val) => acc + val, 0) / latencies.length;
+  // Prevent division by zero if no websites have ticks
+  const averageUptime = websitesWithTicks.length ? 
+    uptimes.reduce((acc, val) => acc + val, 0) / uptimes.length : 0;
+  const averageLatency = websitesWithTicks.length ? 
+    latencies.reduce((acc, val) => acc + val, 0) / latencies.length : 0;
 
     return {
       averageUptime,

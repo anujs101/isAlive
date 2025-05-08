@@ -9,8 +9,8 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Calculate uptime percentage based on ticks
  */
-export function calculateUptimePercentage(ticks: Tick[]): number {
-  if (ticks.length === 0) return 0;
+export function calculateUptimePercentage(ticks?: Tick[]): number {
+  if (!ticks || ticks.length === 0) return 0;
   
   const goodTicks = ticks.filter(tick => tick.status === 'good').length;
   return (goodTicks / ticks.length) * 100;
@@ -19,8 +19,8 @@ export function calculateUptimePercentage(ticks: Tick[]): number {
 /**
  * Get the latest latency from ticks
  */
-export function getLatestLatency(ticks: Tick[]): number {
-  if (ticks.length === 0) return 0;
+export function getLatestLatency(ticks?: Tick[]): number {
+  if (!ticks || ticks.length === 0) return 0;
   
   // Sort by createdAt descending and get the first one
   const sortedTicks = [...ticks].sort((a, b) => 

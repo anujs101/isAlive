@@ -1,6 +1,9 @@
 import express, { response } from "express";
 import { authMiddleware } from "./middleware";
 import { prismaClient } from "db/client";
+import '@clerk/clerk-sdk-node';
+import dotenv from 'dotenv';
+dotenv.config();
 const cors = require('cors');
 const app = express();
 const PORT = 8080;

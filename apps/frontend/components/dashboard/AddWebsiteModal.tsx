@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { addWebsite } from '@/lib/api';
 import { Website } from '@/hooks/useWebsites';
+import { useAuth } from '@clerk/nextjs';
 
 interface AddWebsiteModalProps {
   isOpen: boolean;
@@ -19,7 +20,7 @@ export const AddWebsiteModal: React.FC<AddWebsiteModalProps> = ({
   const [url, setUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const {getToken} = useAuth();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -40,12 +41,15 @@ export const AddWebsiteModal: React.FC<AddWebsiteModalProps> = ({
     setError(null);
     
     try {
-      const newWebsite = await addWebsite(url);
+
+      const token = await getToken();
+      const newWebsite = await addWebsite(url, token || undefined);
       onWebsiteAdded(newWebsite);
       setUrl('');
       onClose();
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Failed to add website');
+      
     } finally {
       setIsLoading(false);
     }

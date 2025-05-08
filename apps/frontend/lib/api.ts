@@ -1,14 +1,14 @@
 import { useAuth} from '@clerk/nextjs';
 import { Website } from '@/hooks/useWebsites';
-
-const API_BASE_URL = '/api/v1';
+import { API_BACKEND_URL } from "@/config";
+const API_BASE_URL = `${API_BACKEND_URL}/api/v1`;
 
 /**
  * Add a new website to monitor
  */
-export const addWebsite = async (url: string): Promise<Website> => {
-  const { getToken } = useAuth();
-  const token = await getToken();
+export const addWebsite = async (url: string, token? : string): Promise<Website> => {
+  //const { getToken } = useAuth();
+  //const token = await getToken();
   
   const response = await fetch(`${API_BASE_URL}/website`, {
     method: 'POST',

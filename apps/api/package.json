@@ -10,9 +10,11 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^4.13.23",
     "@types/express": "^5.0.1",
     "cors": "^2.8.5",
     "db": "*",
+    "dotenv": "^16.5.0",
     "express": "^5.1.0"
   }
 }

@@ -24,7 +24,8 @@ export const WebsiteCard: React.FC<WebsiteCardProps> = ({ website, onDelete }) =
   const uptimePercentage = calculateUptimePercentage(website.ticks);
   const latestLatency = getLatestLatency(website.ticks);
   const statusColor = getStatusColor(latestLatency);
-  const checkCount = website.ticks.length;
+  // Add null check for website.ticks
+  const checkCount = website.ticks?.length || 0;
   
   const handleDelete = async () => {
     if (isDeleting) return;
@@ -92,7 +93,7 @@ export const WebsiteCard: React.FC<WebsiteCardProps> = ({ website, onDelete }) =
             <span className="text-xs px-2 py-1 rounded-full bg-slate-700/50 text-slate-400">30m</span>
           </div>
         </div>
-        <LatencyChart ticks={website.ticks} />
+        <LatencyChart ticks={website.ticks || []} />
       </div>
     </div>
   );
