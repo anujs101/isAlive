@@ -56,7 +56,14 @@ const ws = new WebSocket(`ws://localhost:${PORT}`);
 
 async function validateHandler(ws:WebSocket,{url,callbackId,websiteId}:ValidateOutgoingMessage, keypair:Keypair){
     console.log(`validating ${url} with validatorId: ${validatorId}`);
-const signature = await signMessage(`Replying to ${callbackId}`, keypair);
+    
+    // If validatorId is not set, log an error and return
+    if (!validatorId) {
+        console.error("Cannot validate website: validator not registered yet");
+        return;
+    }
+    
+    const signature = await signMessage(`Replying to ${callbackId}`, keypair);
     try{
         const startTime = Date.now();
         const response = await fetch(url);

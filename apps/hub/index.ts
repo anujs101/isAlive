@@ -45,9 +45,13 @@ async function SignupHandler(ws:ServerWebSocket<unknown>,{ ip, publicKey, signed
         }
     });
     if(validatorDB){
+        console.log(`Validator already registered with ID: ${validatorDB.id}`);
         ws.send(JSON.stringify({
-            validatorId:validatorDB.id,
-            callbackId,
+            type: 'signup', 
+            data: {
+                validatorId:validatorDB.id,
+                callbackId,
+            }
         }));
         availableValidators.push({
             validatorId:validatorDB.id,
@@ -67,6 +71,7 @@ async function SignupHandler(ws:ServerWebSocket<unknown>,{ ip, publicKey, signed
             }
         }
         );
+        console.log(`New Validator registered with ID: ${validator.id}`);
     
 
     ws.send(JSON.stringify({
@@ -116,50 +121,63 @@ async function getLocation(ip:string){
   }
 }
 
-setInterval(async ()=>{
-    const websitesToMonitor = await prismaClient.website.findMany({
-        where :{
-            disabled:false
-        }
-    });
-    for (const website of websitesToMonitor){
-        availableValidators.forEach(validator=>{
-            const callbackId = randomUUIDv7();
-            console.log(`Calling validator ${validator.validatorId} to validate website ${website.url}`);
-            validator.socket.send(JSON.stringify({
-                type :'validate',
-                data:{
-                    callbackId,
-                    url:website.url
-                }
-            }));
-            CALLBACKS[callbackId]= async (data:IncomingMessage)=>{
-                if(data.type==='validate'){
-                    const {validatorId, status, latency, signedMessage} = data.data;
-                    const verified = await verifyMessage(`Replying to ${callbackId}`,validator.publicKey,signedMessage);
-                    if(!verified) {return;}
-                    
-                    await prismaClient.$transaction(async (tx)=>{
-                        await tx.websiteTick.create({
-                            data:{
-                                websiteId:website.id,
-                                validatorId,
-                                status,
-                                latency,
-                                createdAt: new Date(),
-                            },
-                        });
-                        await tx.validator.update({
-                            where:{
-                                id:validatorId
-                            },
-                            data:{
-                                pendingPayouts:{increment:COST_PER_VALIDATION}
-                            },
-                        })
-                    })
-                }
-            }
-        })
-    }
-},1*60*1000)
+// Add this at the end of the file, replacing the existing setInterval
+
+// Wait for validators to register before starting validations
+console.log("Waiting for validators to register before starting validations...");
+setTimeout(() => {
+  console.log("Starting validation interval...");
+  setInterval(async ()=>{
+      const websitesToMonitor = await prismaClient.website.findMany({
+          where :{
+              disabled:false
+          }
+      });
+      for (const website of websitesToMonitor){
+          availableValidators.forEach(validator=>{
+              const callbackId = randomUUIDv7();
+              console.log(`Calling validator ${validator.validatorId} to validate website ${website.url}`);
+              validator.socket.send(JSON.stringify({
+                  type :'validate',
+                  data:{
+                      callbackId,
+                      url:website.url
+                  }
+              }));
+              CALLBACKS[callbackId]= async (data:IncomingMessage)=>{
+                  if(data.type==='validate'){
+                      const {validatorId, status, latency, signedMessage} = data.data;
+                      const verified = await verifyMessage(`Replying to ${callbackId}`,validator.publicKey,signedMessage);
+                      if(!verified) {return;}
+                      
+                      // Skip creating websiteTick if validatorId is null
+                      if(!validatorId) {
+                          console.log(`Validation received but validatorId is null for website ${website.url}`);
+                          return;
+                      }
+                      
+                      await prismaClient.$transaction(async (tx)=>{
+                          await tx.websiteTick.create({
+                              data:{
+                                  websiteId:website.id,
+                                  validatorId,
+                                  status,
+                                  latency,
+                                  createdAt: new Date(),
+                              },
+                          });
+                          await tx.validator.update({
+                              where:{
+                                  id:validatorId
+                              },
+                              data:{
+                                  pendingPayouts:{increment:COST_PER_VALIDATION}
+                              },
+                          })
+                      })
+                  }
+              }
+          })
+      }
+  },1*60*1000);
+}, 10000); // 10 second delay to allow validators to register

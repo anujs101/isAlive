@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  //output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,36 +8,36 @@ datasource db {
 }
 
 model User {
-  id              String      @id     @default(uuid())
-  email           String
+  id    String @id @default(uuid())
+  email String
 }
 
 model Website {
-  id        String      @id     @default(uuid())
-  url       String
-  userId    String
-  ticks     WebsiteTick[]
-  disabled  Boolean     @default(false)
+  id       String        @id @default(uuid())
+  url      String
+  userId   String
+  disabled Boolean       @default(false)
+  ticks    WebsiteTick[]
 }
 
 model Validator {
-  id        String      @id     @default(uuid())
-  publicKey String
-  location  String
-  ip        String
-  pendingPayouts  Int         @default(0)
-  ticks     WebsiteTick[]
+  id             String        @id @default(uuid())
+  publicKey      String
+  location       String
+  ip             String
+  pendingPayouts Int           @default(0)
+  ticks          WebsiteTick[]
 }
 
 model WebsiteTick {
-  id              String      @id     @default(uuid())
-  websiteId       String
-  validatorId     String
-  createdAt       DateTime
-  status          WebsiteStatus
-  latency         Float
-  website         Website    @relation(fields: [websiteId], references: [id])
-  validator       Validator    @relation(fields: [validatorId], references: [id])
+  id          String        @id @default(uuid())
+  websiteId   String
+  validatorId String
+  createdAt   DateTime
+  status      WebsiteStatus
+  latency     Float
+  validator   Validator     @relation(fields: [validatorId], references: [id])
+  website     Website       @relation(fields: [websiteId], references: [id])
 }
 
 enum WebsiteStatus {
