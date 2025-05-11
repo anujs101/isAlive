@@ -12,8 +12,9 @@ export function cn(...inputs: ClassValue[]) {
 export function calculateUptimePercentage(ticks?: Tick[]): number {
   if (!ticks || ticks.length === 0) return 0;
   
-  const goodTicks = ticks.filter(tick => tick.status === 'good').length;
-  return (goodTicks / ticks.length) * 100;
+  // Count successful checks (latency >= 0)
+  const successfulChecks = ticks.filter(tick => tick.latency >= 0).length;
+  return (successfulChecks / ticks.length) * 100;
 }
 
 /**
@@ -34,6 +35,7 @@ export function getLatestLatency(ticks?: Tick[]): number {
  * Get status color based on latency
  */
 export function getStatusColor(latency: number): string {
+  if (latency === -1) return 'red'; // Website is down when latency is -1
   if (latency < 400) return 'green';
   if (latency < 1000) return 'yellow';
   return 'red';
@@ -62,7 +64,17 @@ export function getLatencyChartData(ticks: Tick[]) {
   
   return sortedTicks.map(tick => ({
     time: new Date(tick.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    latency: tick.latency,
+    latency: tick.latency === -1 ? null : tick.latency, // Use null for -1 values to create gaps
     status: tick.status,
+    isUnreachable: tick.latency === -1 // Add flag for tooltip
   }));
+}
+
+/**
+ * Get color based on uptime percentage
+ */
+export function getUptimeColor(uptimePercentage: number): string {
+  if (uptimePercentage >= 98) return 'text-emerald-400';
+  if (uptimePercentage >= 50) return 'text-amber-400';
+  return 'text-red-400';
 }

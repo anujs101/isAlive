@@ -5,10 +5,12 @@ import { Trash2 } from 'lucide-react';
 import { Website } from '@/hooks/useWebsites';
 import { StatusIndicator } from './StatusIndicator';
 import { LatencyChart } from './LatencyChart';
+// Add getUptimeColor to imports
 import { 
   calculateUptimePercentage, 
   getLatestLatency, 
   getStatusColor,
+  getUptimeColor,
   formatUrl
 } from '@/lib/utils';
 import { deleteWebsite } from '@/lib/api';
@@ -28,6 +30,7 @@ export const WebsiteCard: React.FC<WebsiteCardProps> = ({ website, onDelete }) =
   const statusColor = getStatusColor(latestLatency);
   // Add null check for website.ticks
   const checkCount = website.ticks?.length || 0;
+  const uptimeColor = getUptimeColor(uptimePercentage); // Move this here
   
   const handleDelete = async () => {
     if (isDeleting) return;
@@ -68,7 +71,7 @@ export const WebsiteCard: React.FC<WebsiteCardProps> = ({ website, onDelete }) =
       <div className="grid grid-cols-3 gap-2 p-4 border-b border-slate-700/50">
         <div className="flex flex-col">
           <span className="text-xs text-slate-400 mb-1">Uptime</span>
-          <span className="text-xl font-semibold text-emerald-400">
+          <span className={`text-xl font-semibold ${uptimeColor}`}>
             {uptimePercentage.toFixed(3)}%
           </span>
         </div>
@@ -76,7 +79,7 @@ export const WebsiteCard: React.FC<WebsiteCardProps> = ({ website, onDelete }) =
         <div className="flex flex-col">
           <span className="text-xs text-slate-400 mb-1">Response</span>
           <span className="text-xl font-semibold text-blue-400">
-            {latestLatency}ms
+            {latestLatency === -1 ? "Unreachable" : `${latestLatency}ms`}
           </span>
         </div>
         

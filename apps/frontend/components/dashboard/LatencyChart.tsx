@@ -48,7 +48,12 @@ export const LatencyChart: React.FC<LatencyChartProps> = ({ ticks, className }) 
               padding: '0.5rem',
               color: '#f8fafc'
             }}
-            formatter={(value) => [`${value}ms`, 'Latency']}
+            formatter={(value, name, props) => {
+              if (props.payload.isUnreachable) {
+                return ["No response received.", "Latency"];
+              }
+              return [`${value}ms`, 'Latency'];
+            }}
             labelFormatter={(label) => `Time: ${label}`}
           />
           <Area 
