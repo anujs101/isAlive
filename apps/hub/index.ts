@@ -125,7 +125,7 @@ setInterval(async ()=>{
     for (const website of websitesToMonitor){
         availableValidators.forEach(validator=>{
             const callbackId = randomUUIDv7();
-            console.log(`Calling ${validator} to validate the ${website}`);
+            console.log(`Calling validator ${validator.validatorId} to validate website ${website.url}`);
             validator.socket.send(JSON.stringify({
                 type :'validate',
                 data:{
@@ -136,7 +136,7 @@ setInterval(async ()=>{
             CALLBACKS[callbackId]= async (data:IncomingMessage)=>{
                 if(data.type==='validate'){
                     const {validatorId, status, latency, signedMessage} = data.data;
-                    const verified = verifyMessage(`Replying to ${callbackId}`,validator.publicKey,signedMessage);
+                    const verified = await verifyMessage(`Replying to ${callbackId}`,validator.publicKey,signedMessage);
                     if(!verified) {return;}
                     
                     await prismaClient.$transaction(async (tx)=>{
