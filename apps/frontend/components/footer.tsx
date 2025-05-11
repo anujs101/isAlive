@@ -44,9 +44,9 @@ export function Footer() {
   ]
 
   const socialLinks = [
-    { icon: Twitter, href: "#" },
-    { icon: Github, href: "#" },
-    { icon: Linkedin, href: "#" },
+    { icon: Twitter, href: "https://x.com/anujs101" },
+    { icon: Github, href: "https://github.com/anujs101" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/anujs101/" },
   ]
 
   return (
@@ -69,7 +69,7 @@ export function Footer() {
                 <span className="text-xl font-bold">isAlive</span>
               </Link>
 
-              <p className="max-w-xs text-sm text-gray-400">
+              <p >
                 Blockchain-powered uptime monitoring for developers and teams who need reliability and transparency.
               </p>
 
@@ -78,6 +78,8 @@ export function Footer() {
                   <Link
                     key={index}
                     href={social.href}
+                    target="_blank" 
+                    rel="noopener noreferrer"
                     className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-800 bg-gray-950 text-gray-400 transition-colors hover:border-gray-700 hover:bg-gray-900 hover:text-white"
                   >
                     <social.icon className="h-4 w-4" />
@@ -95,7 +97,7 @@ export function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {footerLinks.map((group, groupIndex) => (
+            {/* {footerLinks.map((group, groupIndex) => (
               <div key={groupIndex} className="space-y-3">
                 <h4 className="text-sm font-semibold">{group.title}</h4>
                 <ul className="space-y-2">
@@ -108,7 +110,7 @@ export function Footer() {
                   ))}
                 </ul>
               </div>
-            ))}
+            ))} */}
           </motion.div>
         </div>
 

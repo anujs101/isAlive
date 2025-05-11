@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowRight, ExternalLink } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link";
 
 export function HeroSection() {
   const containerVariants = {
@@ -79,21 +80,26 @@ export function HeroSection() {
             </div>
 
             <motion.div className="flex flex-col gap-4 sm:flex-row sm:gap-3" variants={itemVariants}>
-              <Button
-                size="lg"
-                className="bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 transform hover:translate-y-[-2px] hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-              >
-                Get Started
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-              <Button
+              <Link href="/dashboard" passHref legacyBehavior>
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-blue-600 hover:bg-blue-500 text-white transition-all duration-300 transform hover:translate-y-[-2px] hover:shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                >
+                  <span>
+                    Get Started
+                    <ArrowRight className="ml-2 h-4 w-4 inline" />
+                  </span>
+                </Button>
+              </Link>
+              {/* <Button
                 size="lg"
                 variant="outline"
                 className="border-blue-600/60 text-blue-400 hover:bg-blue-950/30 hover:text-blue-300 hover:border-blue-500 transition-all duration-300 transform hover:translate-y-[-2px]"
               >
                 Live Demo
                 <ExternalLink className="ml-2 h-4 w-4" />
-              </Button>
+              </Button> */}
             </motion.div>
           </motion.div>
 

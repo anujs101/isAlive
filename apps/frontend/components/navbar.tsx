@@ -4,6 +4,13 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
+import {
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -23,7 +30,7 @@ export function Navbar() {
           <span className="text-xl font-bold">isAlive</span>
         </Link>
 
-        <nav className="hidden md:flex md:items-center md:space-x-6">
+        {/* <nav className="hidden md:flex md:items-center md:space-x-6">
           <Link href="#features" className="text-sm text-gray-300 transition-colors hover:text-white">
             Features
           </Link>
@@ -36,13 +43,22 @@ export function Navbar() {
           <Link href="#docs" className="text-sm text-gray-300 transition-colors hover:text-white">
             Docs
           </Link>
-        </nav>
+        </nav> */}
 
         <div className="hidden md:flex md:items-center md:space-x-3">
-          <Button variant="outline" className="border-gray-800 text-gray-300 hover:bg-gray-900">
-            Sign In
-          </Button>
-          <Button className="bg-blue-600 text-white hover:bg-blue-700">Sign Up</Button>
+          <SignedOut>
+            <SignInButton mode="modal">
+              <Button variant="outline" className="border-gray-800 text-gray-300 hover:bg-gray-900">
+                Sign In
+              </Button>
+            </SignInButton>
+            <SignUpButton mode="modal">
+              <Button className="bg-blue-600 text-white hover:bg-blue-700">Sign Up</Button>
+            </SignUpButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
 
         <button className="md:hidden" onClick={toggleMenu} aria-label="Toggle Menu">
@@ -83,10 +99,19 @@ export function Navbar() {
               Docs
             </Link>
             <div className="flex flex-col space-y-2 pt-2">
-              <Button variant="outline" className="w-full border-gray-800 text-gray-300 hover:bg-gray-900">
-                Sign In
-              </Button>
-              <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">Sign Up</Button>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <Button variant="outline" className="w-full border-gray-800 text-gray-300 hover:bg-gray-900">
+                    Sign In
+                  </Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">Sign Up</Button>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
             </div>
           </nav>
         </div>

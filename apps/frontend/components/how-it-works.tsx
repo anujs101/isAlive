@@ -7,8 +7,8 @@ export function HowItWorksSection() {
   const steps = [
     {
       icon: Code,
-      title: "1. Quick Integration",
-      description: "Add our lightweight SDK to your application or use our API endpoints for seamless integration.",
+      title: "1. No Setup Needed",
+      description: "Visit our dashboard, add your site, and we’ll handle the rest.",
     },
     {
       icon: Zap,
