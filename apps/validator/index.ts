@@ -4,11 +4,14 @@ import bs58 from "bs58";
 import { randomUUIDv7 } from "bun";
 import nacl from "tweetnacl";
 import nacl_util from "tweetnacl-util";
+import axios from 'axios';
 const CALLBACKS :{[callback:string]:(data:SignupOutgoingMessage)=>void}= {}
 let validatorId :string|null = null;
 const PORT= 8081;
 async function main(){
 const base58PrivateKey = process.env.PRIVATE_KEY;  
+
+
 
 if (!base58PrivateKey) {
     throw new Error("PRIVATE_KEY environment variable is missing");
@@ -24,10 +27,10 @@ const ws = new WebSocket(`ws://localhost/${PORT}`);
 
     ws.onmessage = async(event)=>{
         const data :OutgoingMessage = JSON.parse(event.data);
-            if(data.type == 'signup'){
+            if(data.type === 'signup'){
                 CALLBACKS[data.data.callbackId]?.(data.data);
                 delete CALLBACKS[data.data.callbackId];
-            } else if (data.type=='validate'){
+            } else if (data.type==='validate'){
                 await validateHandler(ws,data.data, keypair);
             }
     }
@@ -37,11 +40,12 @@ const ws = new WebSocket(`ws://localhost/${PORT}`);
             validatorId = data.validatorId
         }
         const signedMessage = await signMessage(`Signed message for ${callbackId}, ${keypair.publicKey}`, keypair)
+        const ip = await getPublicIP();
         ws.send(JSON.stringify({
             type:'signup',
             data:{
                 callbackId,
-                ip: '127.0.0.1',        //hardcoded for now will implement later
+                ip,
                 publicKey: keypair.publicKey,
                 signedMessage,
             },
@@ -83,6 +87,11 @@ async function signMessage(message:string,keypair:Keypair){
     const messageBytes = nacl_util.decodeUTF8(message);
     const signature = nacl.sign(messageBytes,keypair.secretKey);
     return (JSON.stringify(Array.from(signature)));
+}
+
+async function getPublicIP() {
+  const res = await axios.get('https://api.ipify.org?format=json');
+  return res.data.ip;
 }
 
 main();

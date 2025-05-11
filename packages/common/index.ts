@@ -2,14 +2,14 @@ export interface SignupIncomingMessage{
     publicKey:string,
     signedMessage:string,
     ip:string,
-    callbackid:string
+    callbackId:string
 }
 export interface ValidateIncomingMessage{
     callbackId:string,
     validatorId:string,
     websiteId:string,
     latency:number,
-    status:'Good'|'Bad'|'unknown',
+    status:'Good'|'Bad',
     signedMessage:string
 }
 export interface SignupOutgoingMessage{
