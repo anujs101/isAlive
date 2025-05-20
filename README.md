@@ -17,6 +17,14 @@ Welcome to `isAlive`! I built this project to provide a robust solution for moni
 *   **Decentralized Verification**: Uptime data is secured and verified on the blockchain, offering a higher level of trust compared to traditional centralized monitoring.
 *   **Sleek Dashboard**: A modern, user-friendly interface (as seen in the `hero-section.tsx`) to visualize uptime, response times, and service status.
 
+## 📸 Screenshots
+
+### Landing Page
+![Landing page](/assets/screenshots/isAlive-home.png)
+
+### Dashboard Overview
+![Dashboard Overview](/assets/screenshots/isAilve-dashboard.png)
+
 ## 🛠️ How to Set It Up Locally
 
 This project is a monorepo managed with Turborepo and Bun. It consists of a Next.js frontend and an Express.js API.
