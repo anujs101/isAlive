@@ -8,14 +8,21 @@ Welcome to `isAlive`! I built this project to provide a robust solution for moni
 
 *   **Monitor Critical Infrastructure**: Keep an eye on your important services, APIs, and servers.
 *   **Blockchain-Verified Uptime**: Leverage blockchain for transparent and immutable uptime records.
-*   **Instant Alerts**: Get notified immediately when an issue is detected.
+*   **Instant Alerts**: Get notified immediately when an issue is detected (yet to be implemented).
 *   **Detailed Analytics**: Access comprehensive data and performance metrics for your monitored services.
 *   **Unmatched Reliability**: Designed for developers and teams who demand high availability and trustworthiness.
+
+## 🚀 Why isAlive?
+Most uptime trackers are centralized and unverifiable. This project aims to bring trustless verification to uptime monitoring by using blockchain cryptography (Solana signatures) to prove that validators independently check service health. The system consists of:
+
+- **Hub**: Broadcasts targets and receives health check results
+- **Validators**: Independent clients that verify uptime and sign results
+- **Frontend**: Displays current uptime state using real-time updates
 
 **Unique Features**:
 
 *   **Decentralized Verification**: Uptime data is secured and verified on the blockchain, offering a higher level of trust compared to traditional centralized monitoring.
-*   **Sleek Dashboard**: A modern, user-friendly interface (as seen in the `hero-section.tsx`) to visualize uptime, response times, and service status.
+*   **Sleek Dashboard**: A modern, user-friendly interface to visualize uptime, response times, and service status.
 
 ## 📸 Screenshots
 
